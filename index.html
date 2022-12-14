@@ -97,7 +97,26 @@
                 const editor = appendEditor('.inline-editor', {
                     src: './image.jpeg',
                     // This will set a square crop aspect ratio
-                    imageCropAspectRatio: 3,
+                    imageCropAspectRatio: 1,
+                    // Offer different crop options
+                    cropSelectPresetOptions: [
+                        [undefined, 'Custom'],
+                        [1, 'Square'],
+                        [3 / 2, '3:2'],
+                        [4 / 3, '4:3'],
+                        [5 / 4, '5:4'],
+                        [7 / 5, '7:5'],
+                        [14 / 11, '14:11'],
+                    ],
+
+                    cropEnableRotationInput: false,
+                    // cropEnableButtonRotateLeft: false,
+                    // cropEnableButtonFlipHorizontal: false,
+                    cropEnableZoomInput: false,
+                    cropImageSelectionCornerStyle: 'hook',
+                    cropEnableSelectPreset: true,
+                    cropEnableInfoIndicator: true,
+                    hasCropSelectPresetOptions: true,
                     imageReader: createDefaultImageReader(),
                     imageWriter: createDefaultImageWriter(),
                     shapePreprocessor: createDefaultShapePreprocessor(),
