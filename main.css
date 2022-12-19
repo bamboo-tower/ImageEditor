@@ -1861,8 +1861,8 @@ code[class*=language] .comment {
 }
 
 .hero {
-    padding: 4rem 0 0;
-    padding: var(--page-header-height) 0 0
+    padding: 1rem 0 0;
+    /* padding: var(--page-header-height) 0 0 */
 }
 
 button[data-module=HeroDemoMobile] {
@@ -1899,7 +1899,7 @@ button[data-module=HeroDemoMobile] svg {
 }
 
 .hero-intro {
-    margin-top: 2em;
+    /* margin-top: 2em; */
     text-align: center
 }
 
@@ -1908,14 +1908,14 @@ button[data-module=HeroDemoMobile] svg {
     letter-spacing: -.030625em;
     line-height: 1.15;
     margin: 0 auto;
-    max-width: 36rem
+    max-width: 40rem
 }
 
 .hero-intro p {
     color: #53565c;
     color: var(--color-text);
     margin: 1rem auto;
-    max-width: 36rem
+    max-width: 506rem
 }
 
 .hero-intro p:last-of-type {
