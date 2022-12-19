@@ -751,10 +751,10 @@ ul.list-split li {
 }
 
 .content-gutter {
-    padding-left: 2rem;
+    /* padding-left: 2rem;
     padding-left: var(--page-padding);
     padding-right: 2rem;
-    padding-right: var(--page-padding)
+    padding-right: var(--page-padding) */
 }
 
 .content-limit,.content-limit-wide {
