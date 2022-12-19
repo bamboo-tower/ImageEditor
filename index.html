@@ -99,14 +99,27 @@
                     // This will set a square crop aspect ratio
                     imageCropAspectRatio: 1,
                     // Offer different crop options
+                    cropSelectPresetFilter: 'landscape',
                     cropSelectPresetOptions: [
                         [undefined, 'Custom'],
                         [1, 'Square'],
+
+                        // shown when cropSelectPresetFilter is set to 'landscape'
                         [3 / 2, '3:2'],
                         [4 / 3, '4:3'],
                         [5 / 4, '5:4'],
                         [7 / 5, '7:5'],
                         [14 / 11, '14:11'],
+                        [16 / 9, '16:9'],
+                        [1.4142 / 1, 'ISO（1.4142 : 1）'],
+
+                        // shown when cropSelectPresetFilter is set to 'portrait'
+                        [2 / 3, '2:3'],
+                        [3 / 4, '3:4'],
+                        [4 / 5, '4:5'],
+                        [5 / 7, '5:7'],
+                        [11 / 14, '11:14'],
+                        [1 / 1.4142, 'ISO（1 : 1.4142）'],
                     ],
 
                     cropEnableRotationInput: true,
