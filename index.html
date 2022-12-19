@@ -33,8 +33,6 @@
             import {
                 // editor
                 appendEditor,
-                openEditor,
-                overlayEditor,
                 createDefaultImageReader,
                 createDefaultImageWriter,
                 createDefaultShapePreprocessor,
@@ -55,6 +53,7 @@
                 markup_editor_defaults,
                 markup_editor_locale_en_gb,
                 plugin_frame,
+                plugin_frame_defaults,
                 plugin_frame_locale_en_gb,
             } from './pintura/pintura.js';
 
@@ -109,6 +108,7 @@
                     shapePreprocessor: createDefaultShapePreprocessor(),
                     enableBrowseImage: true,                    
                     ...plugin_filter_defaults,
+                    ...plugin_frame_defaults,
                     ...plugin_finetune_defaults,
                     ...markup_editor_defaults,
                     locale: {
