@@ -11,7 +11,7 @@
     <body data-module="ScrollTracker" class="page-landing" data-scroll="1" data-scroll-progress="0">
         <main>
 
-            <header class="auto-float">
+            <!-- <header class="auto-float">
                 <div class="content-limit content-limit-wide">
                     <a class="logo-link" href="./" aria-label="Pintura Image Editor by PQINA">
                         <span class="logo">Pintura Image Editor</span>
@@ -34,15 +34,15 @@
                         </div>
                     </nav>
                 </div>
-            </header>
+            </header> -->
             <div class="hero">
 
                 <div class="content-gutter content-limit">
             
                     <div class="hero-intro">
-                        <h1 id="a-powerful-javascript-image-editor-that-integrates-with-every-stack">A powerful JavaScript Image Editor that integrates with every stack</h1>
-            <p>A fully configurable image editor SDK that's intuitive on mobile and desktop. Set image requirements and help your customers upload better pictures.</p>
-            <p>Crop, rotate, resize, filter, annotate, adjust colors, <a href="tour/">and much more…</a></p>
+                        <h1 id="a-powerful-javascript-image-editor-that-integrates-with-every-stack">A powerful Image Editor that integrates with every browser</h1>
+            <p>A fully configurable image editor availabe on mobile and desktop. Set image requirements and help customers get better pictures.</p>
+            <p>Crop, rotate, resize, filter, adjust colors, and much more…</p>
             
                         <p>
                             <div class="inline-editor" style="width: 960px; height: 800px"></div>
@@ -78,18 +78,18 @@
                 plugin_finetune_locale_en_gb,
                 plugin_annotate,
                 plugin_annotate_locale_en_gb,
-                plugin_sticker,
-                plugin_sticker_locale_en_gb,
                 markup_editor_defaults,
                 markup_editor_locale_en_gb,
+                plugin_frame,
+                plugin_frame_locale_en_gb,
             } from './pintura/pintura.js';
 
             setPlugins(
                 plugin_crop,
                 plugin_filter,
                 plugin_finetune,
-                plugin_annotate,
-                plugin_sticker
+                plugin_frame,
+                // plugin_annotate,
             );
 
             // inline
@@ -109,10 +109,10 @@
                         [14 / 11, '14:11'],
                     ],
 
-                    cropEnableRotationInput: false,
-                    // cropEnableButtonRotateLeft: false,
+                    cropEnableRotationInput: true,
+                    cropEnableButtonRotateLeft: true,
                     // cropEnableButtonFlipHorizontal: false,
-                    cropEnableZoomInput: false,
+                    cropEnableZoomInput: true,
                     cropImageSelectionCornerStyle: 'hook',
                     cropEnableSelectPreset: true,
                     cropEnableInfoIndicator: true,
@@ -120,30 +120,7 @@
                     imageReader: createDefaultImageReader(),
                     imageWriter: createDefaultImageWriter(),
                     shapePreprocessor: createDefaultShapePreprocessor(),
-                    enableBrowseImage: true,
-                    stickers: [
-                        ['Emoji', ['⭐️', '😊', '👍', '👎', '☀️', '🌤', '🌥']],
-                        [
-                            'Markers',
-                            [
-                                {
-                                    src: 'sticker-one.svg',
-                                    width: '5%',
-                                    alt: 'One',
-                                },
-                                {
-                                    src: 'sticker-two.svg',
-                                    width: '5%',
-                                    alt: 'Two',
-                                },
-                                {
-                                    src: 'sticker-three.svg',
-                                    width: '5%',
-                                    alt: 'Three',
-                                },
-                            ],
-                        ],
-                    ],
+                    enableBrowseImage: true,                    
                     ...plugin_filter_defaults,
                     ...plugin_finetune_defaults,
                     ...markup_editor_defaults,
@@ -153,7 +130,7 @@
                         ...plugin_finetune_locale_en_gb,
                         ...plugin_filter_locale_en_gb,
                         ...plugin_annotate_locale_en_gb,
-                        ...plugin_sticker_locale_en_gb,
+                        ...plugin_frame_locale_en_gb,
                         ...markup_editor_locale_en_gb,
                     },
                 });
