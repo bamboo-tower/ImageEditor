@@ -32755,68 +32755,6 @@ function instance$l($$self, $$props, $$invalidate) {
 			// #region dynamic toolbar
 			$$invalidate(11, cropTools = $redrawTrigger && cropWillRenderTools(
 				[
-					cropEnableButtonRotateLeft && [
-						'Button',
-						'rotate-left',
-						{
-							label: locale.cropLabelButtonRotateLeft,
-							labelClass: 'PinturaToolbarContentWide',
-							icon: locale.cropIconButtonRotateLeft,
-							onclick: () => {
-								applyRotation(-Math.PI / 2);
-								history.write();
-							}
-						}
-					],
-					cropEnableButtonRotateRight && [
-						'Button',
-						'rotate-right',
-						{
-							label: locale.cropLabelButtonRotateRight,
-							labelClass: 'PinturaToolbarContentWide',
-							icon: locale.cropIconButtonRotateRight,
-							onclick: () => {
-								applyRotation(Math.PI / 2);
-								history.write();
-							}
-						}
-					],
-					cropEnableButtonFlipHorizontal && [
-						'Button',
-						'flip-horizontal',
-						{
-							label: locale.cropLabelButtonFlipHorizontal,
-							labelClass: 'PinturaToolbarContentWide',
-							icon: locale.cropIconButtonFlipHorizontal,
-							onclick: () => {
-								if (isRotatedSideways($imageRotation)) {
-									set_store_value(imageFlipY, $imageFlipY = !$imageFlipY, $imageFlipY);
-								} else {
-									set_store_value(imageFlipX, $imageFlipX = !$imageFlipX, $imageFlipX);
-								}
-
-								history.write();
-							}
-						}
-					],
-					cropEnableButtonFlipVertical && [
-						'Button',
-						'flip-vertical',
-						{
-							label: locale.cropLabelButtonFlipVertical,
-							labelClass: 'PinturaToolbarContentWide',
-							icon: locale.cropIconButtonFlipVertical,
-							onclick: () => {
-								if (isRotatedSideways($imageRotation)) {
-									set_store_value(imageFlipX, $imageFlipX = !$imageFlipX, $imageFlipX);
-								} else {
-									set_store_value(imageFlipY, $imageFlipY = !$imageFlipY, $imageFlipY);
-								}
-
-								history.write();
-							}
-						}
-					],
 					shouldRenderPresetSelect && hasCropSelectPresetOptions && [
 						cropSelectPresetFilter === false
 						? 'Dropdown'
@@ -32893,6 +32831,68 @@ function instance$l($$self, $$props, $$invalidate) {
 									}
 								]
 							]
+						}
+					],
+                    cropEnableButtonRotateLeft && [
+						'Button',
+						'rotate-left',
+						{
+							label: locale.cropLabelButtonRotateLeft,
+							labelClass: 'PinturaToolbarContentWide',
+							icon: locale.cropIconButtonRotateLeft,
+							onclick: () => {
+								applyRotation(-Math.PI / 2);
+								history.write();
+							}
+						}
+					],
+					cropEnableButtonRotateRight && [
+						'Button',
+						'rotate-right',
+						{
+							label: locale.cropLabelButtonRotateRight,
+							labelClass: 'PinturaToolbarContentWide',
+							icon: locale.cropIconButtonRotateRight,
+							onclick: () => {
+								applyRotation(Math.PI / 2);
+								history.write();
+							}
+						}
+					],
+					cropEnableButtonFlipHorizontal && [
+						'Button',
+						'flip-horizontal',
+						{
+							label: locale.cropLabelButtonFlipHorizontal,
+							labelClass: 'PinturaToolbarContentWide',
+							icon: locale.cropIconButtonFlipHorizontal,
+							onclick: () => {
+								if (isRotatedSideways($imageRotation)) {
+									set_store_value(imageFlipY, $imageFlipY = !$imageFlipY, $imageFlipY);
+								} else {
+									set_store_value(imageFlipX, $imageFlipX = !$imageFlipX, $imageFlipX);
+								}
+
+								history.write();
+							}
+						}
+					],
+					cropEnableButtonFlipVertical && [
+						'Button',
+						'flip-vertical',
+						{
+							label: locale.cropLabelButtonFlipVertical,
+							labelClass: 'PinturaToolbarContentWide',
+							icon: locale.cropIconButtonFlipVertical,
+							onclick: () => {
+								if (isRotatedSideways($imageRotation)) {
+									set_store_value(imageFlipX, $imageFlipX = !$imageFlipX, $imageFlipX);
+								} else {
+									set_store_value(imageFlipY, $imageFlipY = !$imageFlipY, $imageFlipY);
+								}
+
+								history.write();
+							}
 						}
 					]
 				].filter(Boolean),
