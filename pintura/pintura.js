@@ -30238,6 +30238,8 @@ class ImageRotator extends SvelteComponent {
 function create_fragment$n(ctx) {
 	let div;
 	let p;
+    let resolutionLabel;
+    let fullPrint;
 	let t0;
 	let t1;
 	let t2;
@@ -30246,14 +30248,19 @@ function create_fragment$n(ctx) {
 		c() {
 			div = element("div");
 			p = element("p");
+            resolutionLabel = text("  Resolution: ");
 			t0 = text(/*width*/ ctx[0]);
 			t1 = text(" × ");
 			t2 = text(/*height*/ ctx[1]);
+            fullPrint = text("Print: " + Math.round(ctx[0] / 300) + "\"" + " X " + Math.round(ctx[1] / 300) + "\" ");
 			attr(div, "class", "PinturaImageInfo");
+            attr(p, "style", "justify-content:right")
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
 			append(div, p);
+            append(p, fullPrint);
+            append(p, resolutionLabel);
 			append(p, t0);
 			append(p, t1);
 			append(p, t2);
@@ -30261,6 +30268,7 @@ function create_fragment$n(ctx) {
 		p(ctx, [dirty]) {
 			if (dirty & /*width*/ 1) set_data(t0, /*width*/ ctx[0]);
 			if (dirty & /*height*/ 2) set_data(t2, /*height*/ ctx[1]);
+            if (dirty) set_data(fullPrint, "Print: " + Math.round(ctx[0] / 300) + "\"" + " X " + Math.round(ctx[1] / 300) + "\" ");
 		},
 		i: noop,
 		o: noop,
@@ -32630,9 +32638,10 @@ function instance$l($$self, $$props, $$invalidate) {
 
 	const cropUniqueId = `crop-${getUniqueId()}`;
 
-	let transformInitial = cropEnableRotationInput
-	? cropActiveTransformTool
-	: 'zoom';
+	// let transformInitial = cropEnableRotationInput
+	// ? cropActiveTransformTool
+	// : 'zoom';
+    let transformInitial = 'zoom';
 
 	let transformToolInitial = cropUniqueId + '-' + transformInitial;
 	let transformSelected = transformToolInitial;
@@ -33049,14 +33058,14 @@ function instance$l($$self, $$props, $$invalidate) {
 
 		if ($$self.$$.dirty[0] & /*locale*/ 16 | $$self.$$.dirty[3] & /*cropEnableRotationInput*/ 512 | $$self.$$.dirty[4] & /*shouldRenderZoomInput*/ 1) {
 			$$invalidate(7, tabs = [
+                shouldRenderZoomInput && {
+					id: cropUniqueId + '-zoom',
+					label: locale.cropLabelTabZoom
+				},
 				cropEnableRotationInput && {
 					id: cropUniqueId + '-rotation',
 					label: locale.cropLabelTabRotation
-				},
-				shouldRenderZoomInput && {
-					id: cropUniqueId + '-zoom',
-					label: locale.cropLabelTabZoom
-				}
+				},				
 			].filter(Boolean));
 		}
 

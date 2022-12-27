@@ -2731,7 +2731,7 @@ not all and (min-resolution:0.001dpcm) {
 }
 
 .PinturaImageInfo p {
-    width: 8em;
+    width: 25em;
     height: 1.25em;
     contain: strict;
     overflow: hidden;
