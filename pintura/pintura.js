@@ -30238,6 +30238,7 @@ class ImageRotator extends SvelteComponent {
 function create_fragment$n(ctx) {
 	let div;
 	let p;
+    let spanP;
     let resolutionLabel;
     let fullPrint;
 	let t0;
@@ -30249,17 +30250,20 @@ function create_fragment$n(ctx) {
 			div = element("div");
 			p = element("p");
             resolutionLabel = text("  Resolution: ");
+            spanP = element("span");
 			t0 = text(/*width*/ ctx[0]);
 			t1 = text(" × ");
 			t2 = text(/*height*/ ctx[1]);
             fullPrint = text("Print: " + Math.round(ctx[0] / 300) + "\"" + " X " + Math.round(ctx[1] / 300) + "\" ");
 			attr(div, "class", "PinturaImageInfo");
             attr(p, "style", "justify-content:right")
+            attr(spanP, "style", "padding-right:10px; margin:0")
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
 			append(div, p);
-            append(p, fullPrint);
+            append(spanP, fullPrint);
+            append(p, spanP);
             append(p, resolutionLabel);
 			append(p, t0);
 			append(p, t1);
