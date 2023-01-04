@@ -30254,7 +30254,7 @@ function create_fragment$n(ctx) {
 			t0 = text(/*width*/ ctx[0]);
 			t1 = text(" × ");
 			t2 = text(/*height*/ ctx[1]);
-            fullPrint = text("Print: " + Math.round(ctx[0] / 300) + "\"" + " X " + Math.round(ctx[1] / 300) + "\"");
+            fullPrint = text("Print: " + (ctx[0] / 300).toFixed(1) + "\"" + " X " + (ctx[1] / 300).toFixed(1)  + "\"");
 			attr(div, "class", "PinturaImageInfo");
             attr(p, "style", "justify-content:right")
             attr(spanP, "style", "padding-right:10px; margin:0")
@@ -30272,7 +30272,7 @@ function create_fragment$n(ctx) {
 		p(ctx, [dirty]) {
 			if (dirty & /*width*/ 1) set_data(t0, /*width*/ ctx[0]);
 			if (dirty & /*height*/ 2) set_data(t2, /*height*/ ctx[1]);
-            if (dirty) set_data(fullPrint, "Print: " + Math.round(ctx[0] / 300) + "\"" + " X " + Math.round(ctx[1] / 300) + "\" ");
+            if (dirty) set_data(fullPrint, "Print: " + (ctx[0] / 300).toFixed(1)  + "\"" + " X " + (ctx[1] / 300).toFixed(1)  + "\" ");
 		},
 		i: noop,
 		o: noop,
