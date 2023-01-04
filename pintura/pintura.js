@@ -30249,12 +30249,12 @@ function create_fragment$n(ctx) {
 		c() {
 			div = element("div");
 			p = element("p");
-            resolutionLabel = text("  Resolution: ");
+            resolutionLabel = text("Resolution: ");
             spanP = element("span");
 			t0 = text(/*width*/ ctx[0]);
 			t1 = text(" × ");
 			t2 = text(/*height*/ ctx[1]);
-            fullPrint = text("Print: " + Math.round(ctx[0] / 300) + "\"" + " X " + Math.round(ctx[1] / 300) + "\" ");
+            fullPrint = text("Print: " + Math.round(ctx[0] / 300) + "\"" + " X " + Math.round(ctx[1] / 300) + "\"");
 			attr(div, "class", "PinturaImageInfo");
             attr(p, "style", "justify-content:right")
             attr(spanP, "style", "padding-right:10px; margin:0")
