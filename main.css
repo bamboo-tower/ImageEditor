@@ -233,7 +233,7 @@
         --color-brand-gradient-dim: linear-gradient(to bottom right,#2f282b,#302b2a);
         --color-brand-gradient-dark: linear-gradient(to bottom right,#201b1d,#1e1b1a);
         --color-brand-gradient-right-dim: linear-gradient(90deg,#2f282b,#302b2a);
-        --color-text: #d2d4d8;
+        --color-text: black;
         --color-text-dark: #f0f1f4;
         --color-text-dim: #b6b7bd;
         --color-text-dim-extra: #6a6c72;
