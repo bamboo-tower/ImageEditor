@@ -17077,6 +17077,13 @@ function instance$B($$self, $$props, $$invalidate) {
 
 		// hide details
 		$$invalidate(17, dropdownVisible = false);
+
+        if (selectedLabel == undefined) {
+            var hiddenButtons = document.getElementsByClassName('PinturaButtonHidden');
+            if (hiddenButtons && hiddenButtons.length >= 1) {
+                hiddenButtons[0].click();
+            } 
+        }
 	};
 
 	const handleShowPanel = ({ e, panel }) => {

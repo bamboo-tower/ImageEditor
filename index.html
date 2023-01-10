@@ -36,6 +36,9 @@
                 createDefaultImageReader,
                 createDefaultImageWriter,
                 createDefaultShapePreprocessor,
+                createNode,
+                appendNode,
+                findNode,
                 locale_en_gb,
 
                 // plugins
@@ -57,6 +60,47 @@
                 plugin_frame_locale_en_gb,
             } from './pintura/pintura.js';
 
+            let editor;
+            let panel;
+
+            //
+            // helper functions
+            //
+            const h = (name, attributes, children = []) => {
+                const el = document.createElement(name);
+                const descriptors = Object.getOwnPropertyDescriptors(el.__proto__);
+                for (const key in attributes) {
+                    if (key === 'style') {
+                        el.style.cssText = attributes[key];
+                    } else if (
+                        (descriptors[key] && descriptors[key].set) ||
+                        /textContent|innerHTML/.test(key) ||
+                        typeof attributes[key] === 'function'
+                    ) {
+                        el[key] = attributes[key];
+                    } else {
+                        el.setAttribute(key, attributes[key]);
+                    }
+                }
+                children.forEach((child) => el.appendChild(child));
+                return el;
+            };
+
+            const handleCustomize = () => {
+                const {expectedWidth, expectedHeight,} = window;
+                var width = parseFloat(expectedWidth.value) * 300;
+                var height = parseFloat(expectedHeight.value) * 300;
+                // no need to update
+                if (editor.imageCropSize.width === width && editor.imageCropSize.height === height) return;
+
+                // update state
+                editor.imageCropAspectRatio = width / height;
+                var layer = findNode('popup',editor);
+                layer.hide();
+                
+                history.write();
+            }
+
             setPlugins(
                 plugin_crop,
                 plugin_filter,
@@ -65,9 +109,66 @@
                 // plugin_annotate,
             );
 
+            // create panel content
+            const form = h(
+                'form',
+                {
+                    class: 'export-form',
+                },
+                [                            
+                    // compression row
+                    h(
+                        'div',
+                        {
+                            id: 'imageprintsize',
+                        },
+                        [
+                            h('span', { textContent: 'Print size:' }),
+                            h('span', { class: "number-slider" }, [                                        
+                                
+                                h('input', {
+                                    id: 'expectedWidth',
+                                    type: 'number',
+                                    min: 0,
+                                    max: 100,
+                                    // value: editor.imageCropSize.width / 300,
+                                    step: 0.1,
+                                    onkeydown: (event) => {
+                                        // If return key
+                                        if (event.keyCode == 13) {
+                                            handleCustomize();
+                                        }
+                                    },
+                                }),
+                                h('span', {
+                                    textContent: 'w',
+                                }),
+                                h('input', {
+                                    id: 'expectedHeight',
+                                    type: 'number',
+                                    min: 0,
+                                    // value: editor.imageCropSize.height / 300,
+                                    max: 100,
+                                    step: 0.1,
+                                    onkeydown: (event) => {
+                                        // If return key
+                                        if (event.keyCode == 13) {
+                                            handleCustomize();
+                                        }
+                                    },
+                                }),
+                                h('span', {
+                                    textContent: 'h',
+                                }),
+                            ]),
+                        ]
+                    ),
+                ]
+            );
+
             // inline
             {
-                const editor = appendEditor('.inline-editor', {
+                editor = appendEditor('.inline-editor', {
                     src: './sample.jfif',
                     // This will set a square crop aspect ratio
                     imageCropAspectRatio: 4 / 3,
@@ -100,6 +201,20 @@
                         [11 / 14, '11:14'],
                         [1 / 1.4142, 'ISO（1 : 1.4142）'],
                     ],
+                    cropWillRenderTools: (tools, env) => {
+                        // insert your item
+                        panel = createNode('Panel', 'customize', {
+                                        buttonLabel: ' ',
+                                        buttonClass: 'PinturaButtonHidden', 
+                                        onshow: value => {
+                                            const {expectedWidth, expectedHeight,} = window;
+                                            expectedWidth.value = (editor.imageCropSize.width / 300).toFixed(1);
+                                            expectedHeight.value = (editor.imageCropSize.height / 300).toFixed(1);
+                                        }, 
+                                        root: form,
+                                    });
+                        return [panel,  ...tools,];
+                    },
 
                     cropEnableRotationInput: true,
                     cropEnableButtonRotateLeft: true,
@@ -159,5 +274,134 @@
             }
 
         </script>
+        <style>
+            
+            .PinturaToolbar .PinturaButtonHidden {
+                border: 0;
+                clip: rect(0 0 0 0);
+                -webkit-clip-path: polygon(0 0, 0 0, 0 0);
+                clip-path: polygon(0 0, 0 0, 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+                white-space: nowrap;
+                position: relative;
+                top: 20px;
+                left: 50px;
+            }
+
+            /* export menu */
+            .export-form {
+                padding: 0.75em;
+                width: 14em;
+            }
+        
+            .export-form label,
+            .export-form legend {
+                display: block;
+                font-size: 0.75em;
+                margin-bottom: 0.5em;
+            }
+        
+            .export-form > * + * {
+                margin-top: 0.75em;
+            }
+        
+            .export-form input[type='number'] {
+                -moz-appearance: textfield;
+                border: 1px solid #000;
+                width: 2em;
+                line-height: 1.75;
+                font-size: 0.75em;
+                padding: 0;
+                border-radius: 0.3125em;
+            }
+        
+            .export-form input::-webkit-outer-spin-button,
+            .export-form input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+        
+            .export-form input + label {
+                display: inline-block;
+                border: 1px solid #000;
+                padding: 0.25em 0.5em;
+                margin-right: 0.75em;
+                font-size: 0.75em;
+                border-radius: 0.3125em;
+                cursor: pointer;
+            }
+        
+            .export-form input:checked + label {
+                background: #000;
+                color: #fff;
+            }
+        
+            .export-form .number-slider {
+                position: relative;
+                display: flex;
+                align-items: center;
+            }
+        
+            .export-form .number-slider input[type='number'] {
+                margin-left: 1em;
+                text-align: right;
+                padding-right: 1.5em;
+                padding-left: 0.25em;
+            }
+        
+            .export-form .number-slider span {
+                font-size: 0.75em;
+                right: 0;
+                margin-left: 0.3125em;
+                margin-right: 0.3125em;
+            }
+        
+            .export-form fieldset[disabled] {
+                filter: grayscale(100%);
+                opacity: 0.25;
+            }
+        
+            .export-form button {
+                cursor: pointer;
+                font-size: 0.75em;
+                padding: 0 1em;
+                line-height: 2.25;
+                border-radius: 0.3125em;
+                color: #000;
+                background: #fdba07;
+            }
+        
+            .export-form button[disabled] {
+                filter: grayscale(100%);
+                opacity: 0.5;
+            }
+        
+            .export-form button svg {
+                margin-left: -0.125em;
+                margin-right: 0.5em;
+                width: 1em;
+                height: 1em;
+            }
+        
+            .export-form button svg:only-child {
+                margin: 0;
+            }
+        
+            .export-form button > span {
+                display: flex;
+                align-items: center;
+            }
+        
+            .export-form .outputActions {
+                display: flex;
+                justify-content: space-between;
+            }
+        
+        </style>
     </body>
 </html>
