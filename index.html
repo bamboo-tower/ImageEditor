@@ -28,6 +28,11 @@
         
         
         </main>
+        <script>
+            const ke = new KeyboardEvent('keydown', {
+                bubbles: true, cancelable: true, key:'Escape', keyCode: 27 /*Esc key*/
+            });
+        </script>
         
         <script type="module">
             import {
@@ -94,11 +99,17 @@
                 if (editor.imageCropSize.width === width && editor.imageCropSize.height === height) return;
 
                 // update state
-                editor.imageCropAspectRatio = width / height;
-                var layer = findNode('popup',editor);
-                layer.hide();
+                // editor.imageCropAspectRatio = width / height;
+                var currentCrop = editor.imageCrop;
+                editor.imageCrop = {x: currentCrop.x + (currentCrop.width - width) / 2,
+                                    y: currentCrop.y + (currentCrop.height - height) / 2,
+                                    width: width,
+                                    height: height}
                 
-                history.write();
+                editor.history.write();
+                
+                setTimeout("expectedHeight.dispatchEvent(ke)", 300);
+                // expectedHeight.dispatchEvent(ke);
             }
 
             setPlugins(
