@@ -67,6 +67,27 @@
 
             let editor;
             let panel;
+            const cropSelectOptions = [
+                        [undefined, 'Custom'],
+                        [1, 'Square'],
+
+                        // shown when cropSelectPresetFilter is set to 'landscape'
+                        [3 / 2, '3:2'],
+                        [4 / 3, '4:3'],
+                        [5 / 4, '5:4'],
+                        [7 / 5, '7:5'],
+                        [14 / 11, '14:11'],
+                        [16 / 9, '16:9'],
+                        [1.4142 / 1, 'ISO（1.4142 : 1）'],
+
+                        // shown when cropSelectPresetFilter is set to 'portrait'
+                        [2 / 3, '2:3'],
+                        [3 / 4, '3:4'],
+                        [4 / 5, '4:5'],
+                        [5 / 7, '5:7'],
+                        [11 / 14, '11:14'],
+                        [1 / 1.4142, 'ISO（1 : 1.4142）'],
+                    ];
 
             //
             // helper functions
@@ -92,24 +113,40 @@
             };
 
             const handleCustomize = () => {
-                const {expectedWidth, expectedHeight,} = window;
-                var width = parseFloat(expectedWidth.value) * 300;
-                var height = parseFloat(expectedHeight.value) * 300;
-                // no need to update
-                if (editor.imageCropSize.width === width && editor.imageCropSize.height === height) return;
+                var radios = document.getElementsByName('cropinputtype');
+                if (radios[0].checked) {
+                    const {expectedWidth, expectedHeight, ratioWidth, ratioHeight} = window;
+                    var width = parseFloat(expectedWidth.value) * 300;
+                    var height = parseFloat(expectedHeight.value) * 300;
+                    // no need to update
+                    if (editor.imageCropSize.width === width && editor.imageCropSize.height === height) return;
 
-                // update state
-                // editor.imageCropAspectRatio = width / height;
-                var currentCrop = editor.imageCrop;
-                editor.imageCrop = {x: currentCrop.x + (currentCrop.width - width) / 2,
-                                    y: currentCrop.y + (currentCrop.height - height) / 2,
-                                    width: width,
-                                    height: height}
-                
-                editor.history.write();
+                    // update state
+                    var currentCrop = editor.imageCrop;
+                    editor.imageCrop = {x: currentCrop.x + (currentCrop.width - width) / 2,
+                                        y: currentCrop.y + (currentCrop.height - height) / 2,
+                                        width: width,
+                                        height: height}
+                    
+                    editor.history.write();
+                } else if (radios[1].checked) {
+                    // update state
+                    var width = parseFloat(ratioWidth.value);
+                    var height = parseFloat(ratioHeight.value);
+                    if (height > 0) {
+                        editor.imageCropAspectRatio = width / height;
+                    }
+                    editor.history.write();
+                }
                 
                 setTimeout("expectedHeight.dispatchEvent(ke)", 300);
-                // expectedHeight.dispatchEvent(ke);
+            }
+
+            const swithInputtype = (i) => {
+                var radios = document.getElementsByName('cropinputtype');
+                if (radios && radios.length > i) {
+                    radios[i].checked = true;
+                }
             }
 
             setPlugins(
@@ -126,54 +163,119 @@
                 {
                     class: 'export-form',
                 },
-                [                            
-                    // compression row
-                    h(
-                        'div',
-                        {
-                            id: 'imageprintsize',
-                        },
-                        [
-                            h('span', { textContent: 'Print size:' }),
-                            h('span', { class: "number-slider" }, [                                        
-                                
-                                h('input', {
-                                    id: 'expectedWidth',
-                                    type: 'number',
-                                    min: 0,
-                                    max: 100,
-                                    // value: editor.imageCropSize.width / 300,
-                                    step: 0.1,
-                                    onkeydown: (event) => {
-                                        // If return key
-                                        if (event.keyCode == 13) {
-                                            handleCustomize();
-                                        }
-                                    },
-                                }),
-                                h('span', {
-                                    textContent: 'w',
-                                }),
-                                h('input', {
-                                    id: 'expectedHeight',
-                                    type: 'number',
-                                    min: 0,
-                                    // value: editor.imageCropSize.height / 300,
-                                    max: 100,
-                                    step: 0.1,
-                                    onkeydown: (event) => {
-                                        // If return key
-                                        if (event.keyCode == 13) {
-                                            handleCustomize();
-                                        }
-                                    },
-                                }),
-                                h('span', {
-                                    textContent: 'h',
-                                }),
-                            ]),
-                        ]
-                    ),
+                [
+                    h('ul',
+                        {},
+                        [h( 
+                            'li',
+                            {},[                     
+                            // crop size
+                            h(
+                                'label',
+                                {                                   
+                                },
+                                [
+                                    h('input', { name: 'cropinputtype', type: 'radio', checked: 'true'}),
+                                    h('span', { class: "customizeinput",textContent: 'Print size :', }, [                            
+                                        h('input', {
+                                            id: 'expectedWidth',
+                                            type: 'number',
+                                            min: 0,
+                                            max: 100,
+                                            // value: editor.imageCropSize.width / 300,
+                                            step: 0.1,
+                                            onkeydown: (event) => {
+                                                // If return key
+                                                if (event.keyCode == 13) {
+                                                    handleCustomize();
+                                                }
+                                            },
+                                            onfocus: (event) => {
+                                                swithInputtype(0);
+                                            },
+                                        }),
+                                        h('span', {
+                                            textContent: 'w',
+                                        }),
+                                        h('input', {
+                                            id: 'expectedHeight',
+                                            type: 'number',
+                                            min: 0,
+                                            // value: editor.imageCropSize.height / 300,
+                                            max: 100,
+                                            step: 0.1,
+                                            onkeydown: (event) => {
+                                                // If return key
+                                                if (event.keyCode == 13) {
+                                                    handleCustomize();
+                                                }
+                                            },
+                                            onfocus: (event) => {
+                                                swithInputtype(0);
+                                            },
+                                        }),
+                                        h('span', {
+                                            textContent: 'h',
+                                        }),
+                                    ]),
+                                ]
+                            ),
+                            ]
+                        ),
+                        h( 
+                            'li',
+                            {},[                     
+                            // crop ratio
+                            h(
+                                'label',
+                                {                                 
+                                    
+                                },
+                                [
+                                    h('input', { name: 'cropinputtype', type: 'radio',  }),
+                                    h('span', { class: "customizeinput", textContent: 'Print ratio:'}, [   
+                                        h('input', {
+                                            id: 'ratioWidth',
+                                            type: 'number',
+                                            min: 0,
+                                            max: 100,
+                                            step: 1,
+                                            onkeydown: (event) => {
+                                                // If return key
+                                                if (event.keyCode == 13) {
+                                                    handleCustomize();
+                                                }
+                                            },
+                                            onfocus: (event) => {
+                                                swithInputtype(1);
+                                            },
+                                        }),
+                                        h('span', {
+                                            textContent: ':',
+                                            style: 'width: 1.5em;display: inline-block;text-align: right;margin: 0;'
+                                        }),
+                                        h('input', {
+                                            id: 'ratioHeight',
+                                            type: 'number',
+                                            min: 0,
+                                            max: 100,
+                                            step: 1,
+                                            onkeydown: (event) => {
+                                                // If return key
+                                                if (event.keyCode == 13) {
+                                                    handleCustomize();
+                                                }
+                                            },
+                                            onfocus: (event) => {
+                                                swithInputtype(1);
+                                            },
+                                        }),
+                                    ]),
+                                ]
+                            ),
+                            ]
+                        )
+                                    ])
                 ]
             );
 
@@ -191,36 +293,40 @@
                     },
                     // Offer different crop options
                     cropSelectPresetFilter: 'landscape',
-                    cropSelectPresetOptions: [
-                        [undefined, 'Custom'],
-                        [1, 'Square'],
-
-                        // shown when cropSelectPresetFilter is set to 'landscape'
-                        [3 / 2, '3:2'],
-                        [4 / 3, '4:3'],
-                        [5 / 4, '5:4'],
-                        [7 / 5, '7:5'],
-                        [14 / 11, '14:11'],
-                        [16 / 9, '16:9'],
-                        [1.4142 / 1, 'ISO（1.4142 : 1）'],
-
-                        // shown when cropSelectPresetFilter is set to 'portrait'
-                        [2 / 3, '2:3'],
-                        [3 / 4, '3:4'],
-                        [4 / 5, '4:5'],
-                        [5 / 7, '5:7'],
-                        [11 / 14, '11:14'],
-                        [1 / 1.4142, 'ISO（1 : 1.4142）'],
-                    ],
+                    cropSelectPresetOptions: cropSelectOptions,
                     cropWillRenderTools: (tools, env) => {
                         // insert your item
                         panel = createNode('Panel', 'customize', {
                                         buttonLabel: ' ',
                                         buttonClass: 'PinturaButtonHidden', 
                                         onshow: value => {
-                                            const {expectedWidth, expectedHeight,} = window;
+                                            const {expectedWidth, expectedHeight, ratioWidth, ratioHeight} = window;
                                             expectedWidth.value = (editor.imageCropSize.width / 300).toFixed(1);
                                             expectedHeight.value = (editor.imageCropSize.height / 300).toFixed(1);
+
+                                            var cropRatio = editor.imageCropSize.width / editor.imageCropSize.height;
+                                            if(ratioWidth.value.length > 0 && ratioHeight.value.length > 0) {
+                                                if (cropRatio == ratioWidth.value / ratioHeight.value)
+                                                    return;
+                                            }
+                                            for (var i = 1; i < cropSelectOptions.length; i++) {
+                                                var option = cropSelectOptions[i];
+                                                if (Math.abs(option[0] - cropRatio) < 0.01) {
+                                                    let lable = option[1].replace('ISO（', '').replace('）', '').replace(' ', '');
+                                                    if (option[0] == 1) {
+                                                        ratioWidth.value = 1;
+                                                        ratioHeight.value = 1;
+                                                    } else {
+                                                        var ratioNumbers = lable.split(':')
+                                                        ratioWidth.value = ratioNumbers[0];
+                                                        ratioHeight.value = ratioNumbers[1];
+                                                    }
+                                                    break;
+                                                }
+                                            }
+
+                                            if(ratioWidth.value.length == 0) ratioWidth.value = expectedWidth.value;
+                                            if(ratioHeight.value.length == 0) ratioHeight.value = expectedHeight.value;
                                         }, 
                                         root: form,
                                     });
@@ -324,7 +430,7 @@
             .export-form input[type='number'] {
                 -moz-appearance: textfield;
                 border: 1px solid #000;
-                width: 2em;
+                width: 3em;
                 line-height: 1.75;
                 font-size: 0.75em;
                 padding: 0;
@@ -352,20 +458,20 @@
                 color: #fff;
             }
         
-            .export-form .number-slider {
+            .export-form .customizeinput {
                 position: relative;
-                display: flex;
                 align-items: center;
+                padding-left: 0.5em;;
             }
         
-            .export-form .number-slider input[type='number'] {
+            .export-form .customizeinput input[type='number'] {
                 margin-left: 1em;
                 text-align: right;
                 padding-right: 1.5em;
                 padding-left: 0.25em;
             }
         
-            .export-form .number-slider span {
+            .export-form .customizeinput span {
                 font-size: 0.75em;
                 right: 0;
                 margin-left: 0.3125em;
