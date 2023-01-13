@@ -122,11 +122,14 @@
                     if (editor.imageCropSize.width === width && editor.imageCropSize.height === height) return;
 
                     // update state
-                    var currentCrop = editor.imageCrop;
-                    editor.imageCrop = {x: currentCrop.x + (currentCrop.width - width) / 2,
-                                        y: currentCrop.y + (currentCrop.height - height) / 2,
-                                        width: width,
-                                        height: height}
+                    if (height > 0) {
+                        editor.imageCropAspectRatio = width / height;
+                    }
+                    // var currentCrop = editor.imageCrop;
+                    // editor.imageCrop = {x: currentCrop.x + (currentCrop.width - width) / 2,
+                    //                     y: currentCrop.y + (currentCrop.height - height) / 2,
+                    //                     width: width,
+                    //                     height: height}
                     
                     editor.history.write();
                 } else if (radios[1].checked) {
@@ -142,10 +145,22 @@
                 setTimeout("expectedHeight.dispatchEvent(ke)", 300);
             }
 
-            const swithInputtype = (i) => {
+            const inputtypeChange = (e) => {
+                const {expectedWidth, expectedHeight, ratioWidth, ratioHeight} = window;
                 var radios = document.getElementsByName('cropinputtype');
-                if (radios && radios.length > i) {
-                    radios[i].checked = true;
+
+                expectedWidth.disabled = !radios[0].checked;
+                expectedHeight.disabled = !radios[0].checked;
+                ratioWidth.disabled = !radios[1].checked;
+                ratioHeight.disabled = !radios[1].checked;
+
+                if (!expectedWidth.disabled) {
+                    expectedWidth.focus();
+                    expectedWidth.select();
+                }
+                if (!ratioWidth.disabled) {
+                    ratioWidth.focus();
+                    ratioWidth.select();
                 }
             }
 
@@ -164,6 +179,10 @@
                     class: 'export-form',
                 },
                 [
+                    h('div', {style:'padding-bottom:0.25em'} ,[
+                        h('span', {style:'width:6.8em;text-align:right;display:inline-block', textContent:'w'}, ),
+                        h('span', {style:'width:4.3em;text-align:right;display:inline-block', textContent:'h'}, ),
+                    ]),
                     h('ul',
                         {},
                         [h( 
@@ -175,7 +194,9 @@
                                 {                                   
                                 },
                                 [
-                                    h('input', { name: 'cropinputtype', type: 'radio', checked: 'true'}),
+                                    h('input', { name: 'cropinputtype', type: 'radio', checked: 'true', value:'size',
+                                            onchange: (event) => {inputtypeChange(event)}}),
+
                                     h('span', { class: "customizeinput",textContent: 'Print size :', }, [                            
                                         h('input', {
                                             id: 'expectedWidth',
@@ -189,13 +210,11 @@
                                                 if (event.keyCode == 13) {
                                                     handleCustomize();
                                                 }
-                                            },
-                                            onfocus: (event) => {
-                                                swithInputtype(0);
-                                            },
+                                            }
                                         }),
                                         h('span', {
-                                            textContent: 'w',
+                                            textContent: 'X',
+                                            style: 'width: 1.5em;display: inline-block;text-align: right;margin: 0;'
                                         }),
                                         h('input', {
                                             id: 'expectedHeight',
@@ -209,13 +228,10 @@
                                                 if (event.keyCode == 13) {
                                                     handleCustomize();
                                                 }
-                                            },
-                                            onfocus: (event) => {
-                                                swithInputtype(0);
-                                            },
+                                            }
                                         }),
                                         h('span', {
-                                            textContent: 'h',
+                                            textContent: 'inch',
                                         }),
                                     ]),
                                 ]
@@ -232,7 +248,9 @@
                                     
                                 },
                                 [
-                                    h('input', { name: 'cropinputtype', type: 'radio',  }),
+                                    h('input', { name: 'cropinputtype', type: 'radio', value:'type',
+                                         onchange: (event) => {inputtypeChange(event)}}),
+
                                     h('span', { class: "customizeinput", textContent: 'Print ratio:'}, [   
                                         h('input', {
                                             id: 'ratioWidth',
@@ -240,15 +258,13 @@
                                             min: 0,
                                             max: 100,
                                             step: 1,
+                                            disabled: true,
                                             onkeydown: (event) => {
                                                 // If return key
                                                 if (event.keyCode == 13) {
                                                     handleCustomize();
                                                 }
-                                            },
-                                            onfocus: (event) => {
-                                                swithInputtype(1);
-                                            },
+                                            }
                                         }),
                                         h('span', {
                                             textContent: ':',
@@ -260,14 +276,12 @@
                                             min: 0,
                                             max: 100,
                                             step: 1,
+                                            disabled: true,
                                             onkeydown: (event) => {
                                                 // If return key
                                                 if (event.keyCode == 13) {
                                                     handleCustomize();
                                                 }
-                                            },
-                                            onfocus: (event) => {
-                                                swithInputtype(1);
                                             },
                                         }),
                                     ]),
@@ -305,7 +319,7 @@
                                             expectedHeight.value = (editor.imageCropSize.height / 300).toFixed(1);
 
                                             var cropRatio = editor.imageCropSize.width / editor.imageCropSize.height;
-                                            if(ratioWidth.value.length > 0 && ratioHeight.value.length > 0) {
+                                            if(!ratioWidth.disabled && ratioWidth.value.length > 0 && ratioHeight.value.length > 0) {
                                                 if (cropRatio == ratioWidth.value / ratioHeight.value)
                                                     return;
                                             }
@@ -420,7 +434,7 @@
             .export-form legend {
                 display: block;
                 font-size: 0.75em;
-                margin-bottom: 0.5em;
+                margin-bottom: 0.75em;
             }
         
             .export-form > * + * {
@@ -430,6 +444,17 @@
             .export-form input[type='number'] {
                 -moz-appearance: textfield;
                 border: 1px solid #000;
+                width: 3em;
+                line-height: 1.75;
+                font-size: 0.75em;
+                padding: 0;
+                border-radius: 0.3125em;
+            }
+
+            .export-form input[disabled] {
+                -moz-appearance: textfield;
+                border: 1px solid lightgrey;
+                color: lightgrey;
                 width: 3em;
                 line-height: 1.75;
                 font-size: 0.75em;
