@@ -24508,7 +24508,7 @@ function instance$w($$self, $$props, $$invalidate) {
 								'select',
 								{
 									label: 'Select Image',
-									icon: isNarrow && locale.iconButtonExport,
+									icon: isNarrow && locale.iconButtonSelectImage,
 									class: 'PinturaButtonExport',
 									onclick: browseFileSystem,
 									hideLabel: isNarrow
@@ -49348,6 +49348,7 @@ var _locale_en_gb = {
     iconButtonUndo: `<g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width=".125em"><path d="M10 8h4c2.485 0 5 2 5 5s-2.515 5-5 5h-4"/><path fill="currentColor" d="M5 8l4-3v6z"/></g>`,
     iconButtonRedo: `<g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width=".125em"><path d="M14 8h-4c-2.485 0-5 2-5 5s2.515 5 5 5h4"/><path fill="currentColor" d="M19 8l-4-3v6z"/></g>`,
     iconButtonExport: `<polyline points="20 6 9 17 4 12" fill="none" stroke="currentColor" stroke-width=".125em"></polyline>`,
+    iconButtonSelectImage: `<g fill="none" stroke="currentColor" stroke-width="0.0625em"><path d="M8 21 L15 11 L19 15"/><path d="M15 2 v5 h5"/><path d="M8 2 h8 l4 4 v12 q0 4 -4 4 h-8 q-4 0 -4 -4 v-12 q0 -4 4 -4z"/></g><circle fill="currentColor" cx="10" cy="8" r="1.5"/>`,
 
     // status
     statusLabelButtonClose: 'Close',
