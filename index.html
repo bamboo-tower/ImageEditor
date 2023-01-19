@@ -44,6 +44,8 @@
                 bubbles: true, cancelable: true, key:'Escape', keyCode: 27 /*Esc key*/
             });
 
+            const inputedRatio = {width: 0, height: 0};
+
             const cropSelectOptions = [
                         [undefined, 'Custom'],
                         [1, 'Square'],
@@ -68,6 +70,11 @@
 
             function getRatioLabel(cropRatio) {
                 var ratioLabel = {widthLable:0, heightLable:0};
+
+                if (Math.abs(cropRatio - inputedRatio.width / inputedRatio.height) < 0.01) {
+                    ratioLabel.widthLable = inputedRatio.width;
+                    ratioLabel.heightLable = inputedRatio.height;
+                }
                                             
                 for (var i = 1; i < cropSelectOptions.length; i++) {
                     var option = cropSelectOptions[i];
@@ -149,6 +156,8 @@
                 var radios = document.getElementsByName('cropinputtype');
                 if (radios[0].checked) {
                     const {expectedWidth, expectedHeight, ratioWidth, ratioHeight} = window;
+                    inputedRatio.width = expectedWidth.value;
+                    inputedRatio.height = expectedHeight.value;
                     var width = parseFloat(expectedWidth.value) * 300;
                     var height = parseFloat(expectedHeight.value) * 300;
                     // no need to update
@@ -166,6 +175,8 @@
                     
                     editor.history.write();
                 } else if (radios[1].checked) {
+                    inputedRatio.width = ratioWidth.value;
+                    inputedRatio.height = ratioHeight.value;
                     // update state
                     var width = parseFloat(ratioWidth.value);
                     var height = parseFloat(ratioHeight.value);
@@ -359,8 +370,8 @@
 
                                             var ratioLabel = getRatioLabel(cropRatio);
                                             
-                                            ratioWidth.value = ratioLabel.widthLable;
-                                            ratioHeight.value = ratioLabel.heightLable;
+                                            if (ratioLabel.widthLable != 0) ratioWidth.value = ratioLabel.widthLable;
+                                            if (ratioLabel.heightLable != 0) ratioHeight.value = ratioLabel.heightLable;
 
                                             if(ratioWidth.value.length == 0) ratioWidth.value = expectedWidth.value;
                                             if(ratioHeight.value.length == 0) ratioHeight.value = expectedHeight.value;

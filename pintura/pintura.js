@@ -30251,7 +30251,9 @@ function createMaxPrintInfo(width, height) {
 
 function createRatioInfo(width, height) {
     var ratioLabel = getRatioLabel(width / height);
-    return "Ratio: " + ratioLabel.widthLable + " : " + ratioLabel.heightLable;
+    if (ratioLabel.widthLable != 0 && ratioLabel.heightLable != 0) {
+        return "Ratio: " + ratioLabel.widthLable + " : " + ratioLabel.heightLable;
+    }
 }
 
 function create_fragment$n(ctx) {
