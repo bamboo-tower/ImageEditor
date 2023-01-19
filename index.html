@@ -43,6 +43,49 @@
             const ke = new KeyboardEvent('keydown', {
                 bubbles: true, cancelable: true, key:'Escape', keyCode: 27 /*Esc key*/
             });
+
+            const cropSelectOptions = [
+                        [undefined, 'Custom'],
+                        [1, 'Square'],
+
+                        // shown when cropSelectPresetFilter is set to 'landscape'
+                        [3 / 2, '3:2'],
+                        [4 / 3, '4:3'],
+                        [5 / 4, '5:4'],
+                        [7 / 5, '7:5'],
+                        [14 / 11, '14:11'],
+                        [16 / 9, '16:9'],
+                        [1.4142 / 1, 'ISO（1.4142 : 1）'],
+
+                        // shown when cropSelectPresetFilter is set to 'portrait'
+                        [2 / 3, '2:3'],
+                        [3 / 4, '3:4'],
+                        [4 / 5, '4:5'],
+                        [5 / 7, '5:7'],
+                        [11 / 14, '11:14'],
+                        [1 / 1.4142, 'ISO（1 : 1.4142）'],
+                    ];        
+
+            function getRatioLabel(cropRatio) {
+                var ratioLabel = {widthLable:0, heightLable:0};
+                                            
+                for (var i = 1; i < cropSelectOptions.length; i++) {
+                    var option = cropSelectOptions[i];
+                    if (Math.abs(option[0] - cropRatio) < 0.01) {
+                        let lable = option[1].replace('ISO（', '').replace('）', '').replace(' ', '');
+                        if (option[0] == 1) {
+                            ratioLabel.widthLable = 1;
+                            ratioLabel.heightLable = 1;
+                        } else {
+                            var ratioNumbers = lable.split(':')
+                            ratioLabel.widthLable = ratioNumbers[0];
+                            ratioLabel.heightLable = ratioNumbers[1];
+                        }
+                        break;
+                    }
+                }
+                return ratioLabel;
+            }
         </script>
         
         <script type="module">
@@ -77,28 +120,7 @@
             } from './pintura/pintura.js';
 
             let editor;
-            let panel;
-            const cropSelectOptions = [
-                        [undefined, 'Custom'],
-                        [1, 'Square'],
-
-                        // shown when cropSelectPresetFilter is set to 'landscape'
-                        [3 / 2, '3:2'],
-                        [4 / 3, '4:3'],
-                        [5 / 4, '5:4'],
-                        [7 / 5, '7:5'],
-                        [14 / 11, '14:11'],
-                        [16 / 9, '16:9'],
-                        [1.4142 / 1, 'ISO（1.4142 : 1）'],
-
-                        // shown when cropSelectPresetFilter is set to 'portrait'
-                        [2 / 3, '2:3'],
-                        [3 / 4, '3:4'],
-                        [4 / 5, '4:5'],
-                        [5 / 7, '5:7'],
-                        [11 / 14, '11:14'],
-                        [1 / 1.4142, 'ISO（1 : 1.4142）'],
-                    ];
+            let panel;               
 
             //
             // helper functions
@@ -334,21 +356,11 @@
                                                 if (cropRatio == ratioWidth.value / ratioHeight.value)
                                                     return;
                                             }
-                                            for (var i = 1; i < cropSelectOptions.length; i++) {
-                                                var option = cropSelectOptions[i];
-                                                if (Math.abs(option[0] - cropRatio) < 0.01) {
-                                                    let lable = option[1].replace('ISO（', '').replace('）', '').replace(' ', '');
-                                                    if (option[0] == 1) {
-                                                        ratioWidth.value = 1;
-                                                        ratioHeight.value = 1;
-                                                    } else {
-                                                        var ratioNumbers = lable.split(':')
-                                                        ratioWidth.value = ratioNumbers[0];
-                                                        ratioHeight.value = ratioNumbers[1];
-                                                    }
-                                                    break;
-                                                }
-                                            }
+
+                                            var ratioLabel = getRatioLabel(cropRatio);
+                                            
+                                            ratioWidth.value = ratioLabel.widthLable;
+                                            ratioHeight.value = ratioLabel.heightLable;
 
                                             if(ratioWidth.value.length == 0) ratioWidth.value = expectedWidth.value;
                                             if(ratioHeight.value.length == 0) ratioHeight.value = expectedHeight.value;

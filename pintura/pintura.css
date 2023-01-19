@@ -1794,7 +1794,7 @@ not all and (min-resolution:0.001dpcm) {
 .PinturaUtilPanel[data-util=crop] .PinturaImageInfo {
     position: absolute;
     right: 1em;
-    bottom: 1em
+    bottom: 0.5em
 }
 
 .PinturaUtilPanel[data-util=crop] .PinturaButtonCenter {
@@ -2740,7 +2740,9 @@ not all and (min-resolution:0.001dpcm) {
     font-family: Tahoma, Geneva, Verdana, sans-serif;
     text-align: right;
     line-height: 1;
-    font-size: .75em
+    font-size: .75em;
+    margin-top: 0.5em!important;
+    display: block!important;
 }
 
 .PinturaPresetListFilter .PinturaRadioGroupOptions {
