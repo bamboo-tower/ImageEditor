@@ -1,0 +1,5 @@
+/*!
+* Pintura Image Editor 8.49.2 
+* (c) 2018-2022 PQINA Inc. - All Rights Reserved
+* License: https://pqina.nl/pintura/license/
+*/

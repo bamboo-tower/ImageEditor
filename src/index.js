@@ -58,6 +58,8 @@ const handleCustomize = () => {
     var radios = document.getElementsByName('cropinputtype');
     if (radios[0].checked) {
         const {expectedWidth, expectedHeight, ratioWidth, ratioHeight} = window;
+        inputedSize.width = expectedWidth.value;
+        inputedSize.height = expectedHeight.value;
         inputedRatio.width = expectedWidth.value;
         inputedRatio.height = expectedHeight.value;
         var width = parseFloat(expectedWidth.value) * 300;
@@ -261,9 +263,17 @@ const form = h(
                             buttonClass: 'PinturaButtonHidden', 
                             onshow: value => {
                                 const {expectedWidth, expectedHeight, ratioWidth, ratioHeight} = window;
-                                expectedWidth.value = (editor.imageCropSize.width / 300).toFixed(1);
-                                expectedHeight.value = (editor.imageCropSize.height / 300).toFixed(1);
-
+                                var realWidth = (editor.imageCropSize.width / 300).toFixed(1);
+                                var realHeight = (editor.imageCropSize.height / 300).toFixed(1);
+                                if ( inputedSize.width > 0 && inputedSize.height > 0 
+                                    && realWidth > inputedSize.width && realHeight > inputedSize.height) {
+                                    expectedWidth.value = inputedSize.width;
+                                    expectedHeight.value = inputedSize.height;
+                                } else {
+                                    expectedWidth.value = realWidth;
+                                    expectedHeight.value = realHeight;
+                                }
+                                
                                 var cropRatio = editor.imageCropSize.width / editor.imageCropSize.height;
                                 if(!ratioWidth.disabled && ratioWidth.value.length > 0 && ratioHeight.value.length > 0) {
                                     if (cropRatio == ratioWidth.value / ratioHeight.value)
