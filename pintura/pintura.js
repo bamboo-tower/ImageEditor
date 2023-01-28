@@ -30245,20 +30245,20 @@ function createPrintInfo(width, height) {
     var printWidth = (width/ 300).toFixed(1);
     var printHeight = (height / 300).toFixed(1);
     if ( inputedSize.width > 0 && inputedSize.height > 0 && printWidth > inputedSize.width && printHeight > inputedSize.height) {
-        return "Print: " + inputedSize.width + "\"" + " X " + inputedSize.height  + "\"";
+        return "Print: " + inputedSize.width + "\"" + " x " + inputedSize.height  + "\"";
     } else {
-        return "Print: " + (width/ 300).toFixed(1) + "\"" + " X " + (height / 300).toFixed(1)  + "\"";
+        return "Print: " + (width/ 300).toFixed(1) + "\"" + " x " + (height / 300).toFixed(1)  + "\"";
     }
 }
 
 function createMaxPrintInfo(width, height) {
-    return "Largest Print: " + (width/ 300).toFixed(1) + "\"" + " X " + (height / 300).toFixed(1)  + "\"";
+    return "Largest Print: " + (width/ 300).toFixed(1) + "\"" + " x " + (height / 300).toFixed(1)  + "\"";
 }
 
 function createRatioInfo(width, height) {
     var ratioLabel = getRatioLabel(width / height);
     if (ratioLabel.widthLable != 0 && ratioLabel.heightLable != 0) {
-        return "Ratio: " + ratioLabel.widthLable + " : " + ratioLabel.heightLable;
+        return "Ratio: " + ratioLabel.widthLable + ":" + ratioLabel.heightLable;
     }
 }
 
@@ -30287,7 +30287,7 @@ function create_fragment$n(ctx) {
             spanPrint = element("span");
             spanMaxPrint = element("span");
 			resolutionWidthText = text(/*width*/ ctx[0]);
-			t1 = text(" × ");
+			t1 = text(" x ");
 			resolutionHeightText = text(/*height*/ ctx[1]);
             fullPrint = text(createPrintInfo(/*width*/ ctx[0], /*height*/ ctx[1]))
             maxPrint = text(createMaxPrintInfo(/*width*/ ctx[0], /*height*/ ctx[1]));

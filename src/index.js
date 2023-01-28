@@ -161,7 +161,7 @@ const form = h(
                                 }
                             }),
                             h('span', {
-                                textContent: 'X',
+                                textContent: 'x',
                                 style: 'width: 1.5em;display: inline-block;text-align: right;margin: 0;'
                             }),
                             h('input', {
