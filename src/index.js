@@ -68,15 +68,15 @@ const handleCustomize = () => {
         if (editor.imageCropSize.width === width && editor.imageCropSize.height === height) return;
 
         // update state
-        if (height > 0) {
+        if (editor.imageCropSize.width > width && editor.imageCropSize.height > height) {
             editor.imageCropAspectRatio = width / height;
-        }
-        // var currentCrop = editor.imageCrop;
-        // editor.imageCrop = {x: currentCrop.x + (currentCrop.width - width) / 2,
-        //                     y: currentCrop.y + (currentCrop.height - height) / 2,
-        //                     width: width,
-        //                     height: height}
-        
+        } else {
+            var currentCrop = editor.imageCrop;
+            editor.imageCrop = {x: currentCrop.x + (currentCrop.width - width) / 2,
+                                y: currentCrop.y + (currentCrop.height - height) / 2,
+                                width: width,
+                                height: height}
+        }        
         editor.history.write();
     } else if (radios[1].checked) {
         inputedRatio.width = ratioWidth.value;
