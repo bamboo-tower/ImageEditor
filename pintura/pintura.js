@@ -30244,9 +30244,14 @@ class ImageRotator extends SvelteComponent {
 function createPrintInfo(width, height) {
     var printWidth = (width/ 300).toFixed(1);
     var printHeight = (height / 300).toFixed(1);
-    if ( inputedSize.width > 0 && inputedSize.height > 0 && printWidth > inputedSize.width && printHeight > inputedSize.height) {
+
+    
+    if ( inputedSize.width > 0 && inputedSize.height > 0 && 
+        Math.abs(width / height - inputedSize.width / inputedSize.height) < 0.01 &&
+        printWidth > inputedSize.width && printHeight > inputedSize.height) {
+        // if ratio is same and inputted size is smaller
         return "Print: " + inputedSize.width + "\"" + " x " + inputedSize.height  + "\"";
-    } else {
+    } else {        
         return "Print: " + (width/ 300).toFixed(1) + "\"" + " x " + (height / 300).toFixed(1)  + "\"";
     }
 }
