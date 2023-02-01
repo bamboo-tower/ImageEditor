@@ -68,8 +68,9 @@ const handleCustomize = () => {
         if (editor.imageCropSize.width === width && editor.imageCropSize.height === height) return;
 
         // update state
-        if (editor.imageCropSize.width > width && editor.imageCropSize.height > height) {
-            editor.imageCropAspectRatio = width / height;
+        if (editor.imageCropSize.width > width && editor.imageCropSize.height > height
+                && Math.abs(editor.imageCropAspectRatio - width / height) > 0.01) {
+                editor.imageCropAspectRatio = width / height;  
         } else {
             var currentCrop = editor.imageCrop;
             editor.imageCrop = {x: currentCrop.x + (currentCrop.width - width) / 2,
